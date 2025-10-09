@@ -36,7 +36,7 @@ router.post("/submit", verifyToken, async (req, res) => {
   }
 });
 
-// Get Payments (for employee)
+// Get Payments (for employee)(Not yet implemented for user)
 router.get("/", verifyToken, async (req, res) => {
   const payments = await Payment.find();
   res.json(payments);

@@ -1,3 +1,5 @@
+//FOR LATER USE - Employee Dashboard to verify and submit payments to SWIFT
+
 import React, { useEffect, useState } from "react";
 import api from "../api";
 
