@@ -18,33 +18,6 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-// Security headers middleware (Helmet equivalent for .NET)
-app.Use(async (context, next) =>
-{
-    // Prevent MIME type sniffing
-    context.Response.Headers.Add("X-Content-Type-Options", "nosniff");
-    
-    // Prevent clickjacking
-    context.Response.Headers.Add("X-Frame-Options", "DENY");
-    
-    // Enable XSS protection
-    context.Response.Headers.Add("X-XSS-Protection", "1; mode=block");
-    
-    // Force HTTPS
-    context.Response.Headers.Add("Strict-Transport-Security", "max-age=31536000; includeSubDomains");
-    
-    // Content Security Policy
-    context.Response.Headers.Add("Content-Security-Policy", "default-src 'self'");
-    
-    // Referrer Policy
-    context.Response.Headers.Add("Referrer-Policy", "strict-origin-when-cross-origin");
-    
-    // Remove server header for security
-    context.Response.Headers.Remove("Server");
-    
-    await next();
-});
-
 var summaries = new[]
 {
     "Freezing", "Bracing", "Chilly", "Cool", "Mild", "Warm", "Balmy", "Hot", "Sweltering", "Scorching"
