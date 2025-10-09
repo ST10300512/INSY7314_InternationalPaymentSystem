@@ -378,3 +378,4 @@ C:\Users\conno\Documents\CODE\School\INSY7314 (BANKING)\INSY7314_InternationalPa
 C:\Users\conno\Documents\CODE\School\INSY7314 (BANKING)\INSY7314_InternationalPaymentSystem\InternationalPaymentsPortal\obj\Debug\net8.0\Internat.F5EA35CC.Up2Date
 C:\Users\conno\Documents\CODE\School\INSY7314 (BANKING)\INSY7314_InternationalPaymentSystem\InternationalPaymentsPortal\obj\Debug\net8.0\InternationalPaymentSystem.genruntimeconfig.cache
 C:\Users\conno\Documents\CODE\School\INSY7314 (BANKING)\INSY7314_InternationalPaymentSystem\InternationalPaymentsPortal\obj\Debug\net8.0\ref\InternationalPaymentSystem.dll
+C:\Users\conno\Documents\CODE\School\INSY7314 (BANKING)\INSY7314_InternationalPaymentSystem\InternationalPaymentsPortal\bin\Debug\net8.0\Microsoft.AspNetCore.Authentication.JwtBearer.dll

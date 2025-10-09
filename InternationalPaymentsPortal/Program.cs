@@ -2,6 +2,7 @@ using System.Text;
 using InternationalPaymentPortal.Data.Repositories;
 using InternationalPaymentPortal.Data.Repositories.Interfaces;
 using InternationalPaymentPortal.Models;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using MongoDB.Bson;
@@ -43,6 +44,33 @@ builder.Services.AddScoped(sp =>
 
 // Register your repositories
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
+builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
+builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
+
+// ---------- JWT Authentication ----------
+var jwtKey = builder.Configuration["Jwt:Key"];
+if (string.IsNullOrEmpty(jwtKey))
+{
+    throw new InvalidOperationException(
+        "JWT Key is not configured. Please set 'Jwt:Key' in appsettings.json."
+    );
+}
+
+builder
+    .Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateIssuer = true,
+            ValidateAudience = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(jwtKey)),
+        };
+    });
 
 // ---------- CORS ----------
 builder.Services.AddCors(options =>

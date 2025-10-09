@@ -1,5 +1,6 @@
 using InternationalPaymentPortal.Data.Repositories.Interfaces;
 using InternationalPaymentPortal.Models;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
 namespace InternationalPaymentPortal.Data.Repositories
@@ -10,9 +11,9 @@ namespace InternationalPaymentPortal.Data.Repositories
     {
         private readonly IMongoCollection<Payment> _payments;
 
-        public PaymentRepository(IMongoDatabase database)
+        public PaymentRepository(IMongoDatabase database, IOptions<MongoDbSettings> settings)
         {
-            _payments = database.GetCollection<Payment>("payments");
+            _payments = database.GetCollection<Payment>(settings.Value.PaymentsCollectionName);
         }
 
         public async Task<IEnumerable<Payment>> GetAllAsync()

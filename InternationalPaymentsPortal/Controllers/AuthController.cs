@@ -1,10 +1,16 @@
 // Handles registration & login (customers & employees)
+using System;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
+using System.Text;
 using System.Threading.Tasks;
 using BCrypt.Net;
 using InternationalPaymentPortal.Data.Repositories.Interfaces;
 using InternationalPaymentsPortal.DTOs;
 using InternationalPaymentsPortal.Models;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Microsoft.IdentityModel.Tokens;
 
 namespace InternationalPaymentsPortal.Controllers
 {
@@ -13,10 +19,73 @@ namespace InternationalPaymentsPortal.Controllers
     public class AuthController : ControllerBase
     {
         private readonly ICustomerRepository _customerRepository;
+        private readonly IEmployeeRepository _employeeRepository;
+        private readonly IConfiguration _configuration;
 
-        public AuthController(ICustomerRepository customerRepository)
+        public AuthController(
+            ICustomerRepository customerRepository,
+            IEmployeeRepository employeeRepository,
+            IConfiguration configuration
+        )
         {
             _customerRepository = customerRepository;
+            _employeeRepository = employeeRepository;
+            _configuration = configuration;
+        }
+
+        [HttpPost("login")]
+        public async Task<IActionResult> Login(LoginDto loginDto)
+        {
+            // 1. Check if user is a customer
+            var customer = await _customerRepository.GetByEmailAsync(loginDto.Email);
+            if (customer != null)
+            {
+                if (BCrypt.Net.BCrypt.Verify(loginDto.Password, customer.PasswordHash))
+                {
+                    var token = GenerateJwtToken(customer.Id!, customer.Email, customer.Role);
+                    return Ok(new { token, role = customer.Role });
+                }
+            }
+
+            // 2. If not a customer, check if user is an employee
+            var employee = await _employeeRepository.GetByEmailAsync(loginDto.Email);
+            if (employee != null)
+            {
+                if (BCrypt.Net.BCrypt.Verify(loginDto.Password, employee.PasswordHash))
+                {
+                    var token = GenerateJwtToken(employee.Id, employee.Email, employee.Role);
+                    return Ok(new { token, role = employee.Role });
+                }
+            }
+
+            // 3. If user not found in either or password incorrect
+            return Unauthorized(new { message = "Invalid email or password." });
+        }
+
+        private string GenerateJwtToken(string userId, string email, string role)
+        {
+            var securityKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]!)
+            );
+            var credentials = new SigningCredentials(securityKey, SecurityAlgorithms.HmacSha256);
+
+            var claims = new[]
+            {
+                new Claim(JwtRegisteredClaimNames.Sub, userId),
+                new Claim(JwtRegisteredClaimNames.Email, email),
+                new Claim("role", role),
+                new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
+            };
+
+            var token = new JwtSecurityToken(
+                issuer: _configuration["Jwt:Issuer"],
+                audience: _configuration["Jwt:Audience"],
+                claims: claims,
+                expires: DateTime.Now.AddHours(3),
+                signingCredentials: credentials
+            );
+
+            return new JwtSecurityTokenHandler().WriteToken(token);
         }
 
         [HttpPost("register")]

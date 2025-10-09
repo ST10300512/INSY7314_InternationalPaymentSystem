@@ -22,6 +22,9 @@ namespace InternationalPaymentsPortal.Models
         [BsonElement("PasswordHash")]
         public required string PasswordHash { get; set; }
 
+        [BsonElement("Role")]
+        public string Role { get; } = "Customer";
+
         [BsonElement("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
