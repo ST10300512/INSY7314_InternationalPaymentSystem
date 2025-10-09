@@ -2,18 +2,27 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace InternationalPaymentSystem.Models
+namespace InternationalPaymentsPortal.Models
 {
     public class Customer
     {
         [BsonId]
         [BsonRepresentation(BsonType.ObjectId)]
-        public string Id { get; set; } = string.Empty;
+        public string? Id { get; set; }
 
-        public string FullName { get; set; } = string.Empty;
-        public string Email { get; set; } = string.Empty;
-        public string AccountNumber { get; set; } = string.Empty;
-        public string PasswordHash { get; set; } = string.Empty;
+        [BsonElement("FullName")]
+        public required string FullName { get; set; }
+
+        [BsonElement("Email")]
+        public required string Email { get; set; }
+
+        [BsonElement("AccountNumber")]
+        public required string AccountNumber { get; set; }
+
+        [BsonElement("PasswordHash")]
+        public required string PasswordHash { get; set; }
+
+        [BsonElement("CreatedAt")]
         public DateTime CreatedAt { get; set; } = DateTime.UtcNow;
     }
 }

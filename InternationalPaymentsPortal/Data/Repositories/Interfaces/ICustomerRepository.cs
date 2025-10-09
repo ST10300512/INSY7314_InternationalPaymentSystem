@@ -1,6 +1,6 @@
-using InternationalPaymentSystem.Models;
+using InternationalPaymentsPortal.Models;
 
-namespace InternationalPaymentSystem.Data.Repositories.Interfaces
+namespace InternationalPaymentPortal.Data.Repositories.Interfaces
 {
     public interface ICustomerRepository
     {

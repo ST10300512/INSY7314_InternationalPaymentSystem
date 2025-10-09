@@ -1,8 +1,8 @@
-using InternationalPaymentSystem.Data.Repositories.Interfaces;
-using InternationalPaymentSystem.Models;
+using InternationalPaymentPortal.Data.Repositories.Interfaces;
+using InternationalPaymentPortal.Models;
 using MongoDB.Driver;
 
-namespace InternationalPaymentSystem.Data.Repositories
+namespace InternationalPaymentPortal.Data.Repositories
 {
     // Repository for managing Payment entities in MongoDB
     // CRUD Operations

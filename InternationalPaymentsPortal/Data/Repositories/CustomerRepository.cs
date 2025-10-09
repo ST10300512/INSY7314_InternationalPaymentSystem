@@ -1,8 +1,10 @@
-using InternationalPaymentSystem.Data.Repositories.Interfaces;
-using InternationalPaymentSystem.Models;
+using InternationalPaymentPortal.Data.Repositories.Interfaces;
+using InternationalPaymentPortal.Models;
+using InternationalPaymentsPortal.Models;
+using Microsoft.Extensions.Options;
 using MongoDB.Driver;
 
-namespace InternationalPaymentSystem.Data.Repositories
+namespace InternationalPaymentPortal.Data.Repositories
 {
     // Repository for managing Customer entities in MongoDB
     // CRUD Operations
@@ -10,9 +12,9 @@ namespace InternationalPaymentSystem.Data.Repositories
     {
         private readonly IMongoCollection<Customer> _customers;
 
-        public CustomerRepository(IMongoDatabase database)
+        public CustomerRepository(IMongoDatabase database, IOptions<MongoDbSettings> settings)
         {
-            _customers = database.GetCollection<Customer>("customers");
+            _customers = database.GetCollection<Customer>(settings.Value.CustomersCollectionName);
         }
 
         public async Task<IEnumerable<Customer>> GetAllAsync()

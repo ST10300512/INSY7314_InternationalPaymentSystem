@@ -2,7 +2,7 @@
 using MongoDB.Bson;
 using MongoDB.Bson.Serialization.Attributes;
 
-namespace InternationalPaymentSystem.Models
+namespace InternationalPaymentPortal.Models
 {
     public class Payment
     {

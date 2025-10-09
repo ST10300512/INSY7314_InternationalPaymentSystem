@@ -1,47 +1,39 @@
-// Startup file with middleware, HTTPS, EF setup
-using InternationalPaymentSystem.Data.Repositories;
-using InternationalPaymentSystem.Data.Repositories.Interfaces;
-using InternationalPaymentSystem.Models;
+using System.Text;
+using InternationalPaymentPortal.Data.Repositories;
+using InternationalPaymentPortal.Data.Repositories.Interfaces;
+using InternationalPaymentPortal.Models;
 using Microsoft.Extensions.Options;
+using Microsoft.IdentityModel.Tokens;
+using MongoDB.Bson;
 using MongoDB.Driver;
 
 var builder = WebApplication.CreateBuilder(args);
 
-// Add services to the container.
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+// Add services
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+builder.Services.AddControllers();
 
-// Add CORS services
-builder.Services.AddCors(options =>
+// ---------- MongoDB configuration ----------
+// bind MongoDbSettings from configuration (appsettings.json or env)
+var mongoSection = builder.Configuration.GetSection("MongoDbSettings");
+builder.Services.Configure<MongoDbSettings>(mongoSection);
+
+var mongoSettings = mongoSection.Get<MongoDbSettings>();
+if (string.IsNullOrWhiteSpace(mongoSettings?.ConnectionString))
 {
-    options.AddPolicy(
-        "AllowReactApp",
-        builder =>
-        {
-            builder
-                .WithOrigins("http://localhost:3000") // URL of the React app
-                .AllowAnyHeader()
-                .AllowAnyMethod();
-        }
-    );
-});
+    throw new InvalidOperationException("MongoDbSettings:ConnectionString is not configured.");
+}
 
-// ---------------------------
-// 🔗 MongoDB configuration
-// ---------------------------
-
-// Bind appsettings.json -> MongoDbSettings
-builder.Services.Configure<MongoDbSettings>(builder.Configuration.GetSection("MongoDbSettings"));
-
-// Register MongoClient as singleton
+// Correctly configure and register a single MongoClient
 builder.Services.AddSingleton<IMongoClient>(sp =>
 {
-    var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
-    return new MongoClient(settings.ConnectionString);
+    var settings = MongoClientSettings.FromConnectionString(mongoSettings.ConnectionString);
+    settings.ServerApi = new ServerApi(ServerApiVersion.V1);
+    return new MongoClient(settings);
 });
 
-// Register the IMongoDatabase scoped per request
+// Register IMongoDatabase as scoped (per-request)
 builder.Services.AddScoped(sp =>
 {
     var settings = sp.GetRequiredService<IOptions<MongoDbSettings>>().Value;
@@ -49,16 +41,21 @@ builder.Services.AddScoped(sp =>
     return client.GetDatabase(settings.DatabaseName);
 });
 
-// Register repositories
+// Register your repositories
 builder.Services.AddScoped<ICustomerRepository, CustomerRepository>();
-builder.Services.AddScoped<IPaymentRepository, PaymentRepository>();
-builder.Services.AddScoped<IEmployeeRepository, EmployeeRepository>();
 
-// ---------------------------
+// ---------- CORS ----------
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowReactDev",
+        p => p.WithOrigins("http://localhost:3000").AllowAnyHeader().AllowAnyMethod()
+    );
+});
 
+// ---------- Build app ----------
 var app = builder.Build();
 
-// Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())
 {
     app.UseSwagger();
@@ -67,45 +64,11 @@ if (app.Environment.IsDevelopment())
 
 app.UseHttpsRedirection();
 
-app.UseCors("AllowReactApp");
+app.UseCors("AllowReactDev");
 
-app.MapControllers(); // Make sure you have this to map your controllers
+app.UseAuthentication();
+app.UseAuthorization();
 
-var summaries = new[]
-{
-    "Freezing",
-    "Bracing",
-    "Chilly",
-    "Cool",
-    "Mild",
-    "Warm",
-    "Balmy",
-    "Hot",
-    "Sweltering",
-    "Scorching",
-};
-
-app.MapGet(
-        "/weatherforecast",
-        () =>
-        {
-            var forecast = Enumerable
-                .Range(1, 5)
-                .Select(index => new WeatherForecast(
-                    DateOnly.FromDateTime(DateTime.Now.AddDays(index)),
-                    Random.Shared.Next(-20, 55),
-                    summaries[Random.Shared.Next(summaries.Length)]
-                ))
-                .ToArray();
-            return forecast;
-        }
-    )
-    .WithName("GetWeatherForecast")
-    .WithOpenApi();
+app.MapControllers();
 
 app.Run();
-
-record WeatherForecast(DateOnly Date, int TemperatureC, string? Summary)
-{
-    public int TemperatureF => 32 + (int)(TemperatureC / 0.5556);
-}

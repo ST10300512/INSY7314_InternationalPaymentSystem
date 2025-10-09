@@ -12,7 +12,7 @@ export default function Register() {
       const res = await api.post("/api/Auth/register", form);
       alert("Registered: " + JSON.stringify(res.data));
     } catch (err) {
-      alert("Error: " + err.response?.data?.title || err.message);
+      alert("Error: " +  err.message);
     }
   };
 
