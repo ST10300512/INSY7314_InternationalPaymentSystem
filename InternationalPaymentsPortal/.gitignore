@@ -1,0 +1,73 @@
+# Visual Studio files
+.vs/
+*.suo
+*.user
+*.userprefs
+*.log
+*.pdb
+*.obj
+*.o
+*.ncb
+*.aps
+*.bsc
+*.sbr
+*.res
+*.pch
+*.ipch
+*.idb
+*.tlog
+*.lastbuildstate
+*.bak
+*.old
+*.ilk
+*.suo
+*.user
+*.userprefs
+*.cache
+*.sdf
+*.vssscc
+*.vspscc
+*.vsscc
+*.vssscc
+*.vsp
+*.vspx
+*.psess
+*.vsw
+*.codecoverage
+*.tmp
+*.temp
+*.testrunconfig
+*.trx
+
+# Build artifacts
+bin/
+obj/
+Debug/
+Release/
+publish/
+artifacts/
+
+# Packages
+packages/
+node_modules/
+bower_components/
+
+# Local settings and configuration
+appsettings*.Development.json
+web.config.user
+web.Debug.config
+web.Release.config
+*.pubxml
+*.pubxml.user
+
+# Database files
+*.mdf
+*.ldf
+*.sdf
+*.db
+*.sqlite
+
+# Other common files to ignore
+Thumbs.db
+Desktop.ini
+.DS_Store

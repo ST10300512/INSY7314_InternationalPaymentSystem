@@ -12,6 +12,21 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
+// Add CORS services
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy(
+        "AllowReactApp",
+        builder =>
+        {
+            builder
+                .WithOrigins("http://localhost:3000") // URL of the React app
+                .AllowAnyHeader()
+                .AllowAnyMethod();
+        }
+    );
+});
+
 // ---------------------------
 // 🔗 MongoDB configuration
 // ---------------------------
@@ -51,6 +66,10 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+
+app.UseCors("AllowReactApp");
+
+app.MapControllers(); // Make sure you have this to map your controllers
 
 var summaries = new[]
 {
