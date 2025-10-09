@@ -1,26 +1,31 @@
 {
   "format": 1,
   "restore": {
-    "/Users/emmajaedunn/INSY7314_InternationalPaymentSystem/InternationalPaymentsPortal/InternationalPaymentSystem.csproj": {}
+    "C:\\Users\\conno\\Documents\\CODE\\School\\INSY7314 (BANKING)\\INSY7314_InternationalPaymentSystem\\InternationalPaymentsPortal\\InternationalPaymentSystem.csproj": {}
   },
   "projects": {
-    "/Users/emmajaedunn/INSY7314_InternationalPaymentSystem/InternationalPaymentsPortal/InternationalPaymentSystem.csproj": {
+    "C:\\Users\\conno\\Documents\\CODE\\School\\INSY7314 (BANKING)\\INSY7314_InternationalPaymentSystem\\InternationalPaymentsPortal\\InternationalPaymentSystem.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "/Users/emmajaedunn/INSY7314_InternationalPaymentSystem/InternationalPaymentsPortal/InternationalPaymentSystem.csproj",
+        "projectUniqueName": "C:\\Users\\conno\\Documents\\CODE\\School\\INSY7314 (BANKING)\\INSY7314_InternationalPaymentSystem\\InternationalPaymentsPortal\\InternationalPaymentSystem.csproj",
         "projectName": "InternationalPaymentSystem",
-        "projectPath": "/Users/emmajaedunn/INSY7314_InternationalPaymentSystem/InternationalPaymentsPortal/InternationalPaymentSystem.csproj",
-        "packagesPath": "/Users/emmajaedunn/.nuget/packages/",
-        "outputPath": "/Users/emmajaedunn/INSY7314_InternationalPaymentSystem/InternationalPaymentsPortal/obj/",
+        "projectPath": "C:\\Users\\conno\\Documents\\CODE\\School\\INSY7314 (BANKING)\\INSY7314_InternationalPaymentSystem\\InternationalPaymentsPortal\\InternationalPaymentSystem.csproj",
+        "packagesPath": "C:\\Users\\conno\\.nuget\\packages\\",
+        "outputPath": "C:\\Users\\conno\\Documents\\CODE\\School\\INSY7314 (BANKING)\\INSY7314_InternationalPaymentSystem\\InternationalPaymentsPortal\\obj\\",
         "projectStyle": "PackageReference",
+        "fallbackFolders": [
+          "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
+        ],
         "configFilePaths": [
-          "/Users/emmajaedunn/.nuget/NuGet/NuGet.Config"
+          "C:\\Users\\conno\\AppData\\Roaming\\NuGet\\NuGet.Config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.FallbackLocation.config",
+          "C:\\Program Files (x86)\\NuGet\\Config\\Microsoft.VisualStudio.Offline.config"
         ],
         "originalTargetFrameworks": [
           "net8.0"
         ],
         "sources": {
-          "/usr/local/share/dotnet/library-packs": {},
+          "C:\\Program Files (x86)\\Microsoft SDKs\\NuGetPackages\\": {},
           "https://api.nuget.org/v3/index.json": {}
         },
         "frameworks": {
@@ -38,7 +43,8 @@
           "enableAudit": "true",
           "auditLevel": "low",
           "auditMode": "direct"
-        }
+        },
+        "SdkAnalysisLevel": "9.0.300"
       },
       "frameworks": {
         "net8.0": {
@@ -80,6 +86,10 @@
               "target": "Package",
               "version": "[9.0.9, )"
             },
+            "MongoDB.Driver": {
+              "target": "Package",
+              "version": "[3.5.0, )"
+            },
             "Serilog.AspNetCore": {
               "target": "Package",
               "version": "[9.0.0, )"
@@ -116,7 +126,7 @@
               "privateAssets": "all"
             }
           },
-          "runtimeIdentifierGraphPath": "/usr/local/share/dotnet/sdk/8.0.411/PortableRuntimeIdentifierGraph.json"
+          "runtimeIdentifierGraphPath": "C:\\Program Files\\dotnet\\sdk\\9.0.304/PortableRuntimeIdentifierGraph.json"
         }
       }
     }
