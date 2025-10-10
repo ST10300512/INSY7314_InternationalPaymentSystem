@@ -89,7 +89,7 @@ export default function EmployeeDashboard() {
   );
 }
 
-// Simple inline styles for clarity and professionalism
+// Styles
 const styles = {
   container: {
     padding: "20px",

@@ -1,4 +1,3 @@
-
 //Imports and Setup for HTTPS Server
 import express from "express";
 import dotenv from "dotenv";
@@ -82,5 +81,5 @@ const PORT = process.env.PORT || 5000;
 
 //START HTTPS SERVER
 httpsServer.listen(PORT, () => {
-  console.log(`✅ HTTPS server running securely at https://localhost:${PORT}`);
+  console.log(`HTTPS server running securely at https://localhost:${PORT}`);
 });
