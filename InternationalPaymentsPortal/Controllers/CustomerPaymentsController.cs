@@ -3,6 +3,7 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using InternationalPaymentPortal.Data.Repositories.Interfaces;
 using InternationalPaymentPortal.Models;
+using InternationalPaymentsPortal.DTOs;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 
@@ -34,8 +35,13 @@ namespace InternationalPaymentPortal.Controllers
         }
 
         [HttpPost("create")]
-        public async Task<IActionResult> CreatePayment([FromBody] Payment paymentDto)
+        public async Task<IActionResult> CreatePayment([FromBody] PaymentDto paymentDto)
         {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest(ModelState);
+            }
+
             var customerId = User.FindFirstValue(ClaimTypes.NameIdentifier);
             if (string.IsNullOrEmpty(customerId))
             {
@@ -47,9 +53,9 @@ namespace InternationalPaymentPortal.Controllers
                 CustomerId = customerId,
                 Amount = paymentDto.Amount,
                 Currency = paymentDto.Currency,
-                Provider = paymentDto.Provider,
-                SwiftCode = paymentDto.SwiftCode,
-                PayeeAccount = paymentDto.PayeeAccount,
+                Provider = "SWIFT", // Default provider
+                SwiftCode = paymentDto.RecipientBankSwiftBic,
+                PayeeAccount = paymentDto.RecipientAccountNumber,
                 Status = "Pending", // Default status
                 CreatedAt = System.DateTime.UtcNow,
             };

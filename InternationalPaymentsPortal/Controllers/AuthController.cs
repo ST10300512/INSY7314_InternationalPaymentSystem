@@ -89,40 +89,36 @@ namespace InternationalPaymentsPortal.Controllers
         }
 
         [HttpPost("register")]
-        public async Task<IActionResult> Register(RegisterDto dto)
+        public async Task<IActionResult> Register([FromBody] RegisterDto dto)
         {
-            try
+            // Model state validation is automatically handled by [ApiController]
+            if (!ModelState.IsValid)
             {
-                if (string.IsNullOrWhiteSpace(dto.Email) || string.IsNullOrWhiteSpace(dto.Password))
-                    return BadRequest(new { message = "Email and password are required." });
-
-                var existing = await _customerRepository.GetByEmailAsync(dto.Email);
-                if (existing != null)
-                    return Conflict(new { message = "Email already registered." });
-
-                var customer = new Customer
-                {
-                    FullName = dto.FullName,
-                    AccountNumber = dto.AccountNumber,
-                    Email = dto.Email,
-                    PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
-                    CreatedAt = DateTime.UtcNow,
-                };
-
-                await _customerRepository.CreateAsync(customer);
-
-                return Ok(new { message = "Registered" });
+                return BadRequest(ModelState);
             }
-            catch (Exception ex)
+
+            if (await _customerRepository.EmailExistsAsync(dto.Email))
             {
-                // Log the error details
-                Console.WriteLine($"Error: {ex.Message}");
-                Console.WriteLine($"StackTrace: {ex.StackTrace}");
-                return StatusCode(
-                    500,
-                    new { message = "Internal server error", error = ex.Message }
-                );
+                return Conflict(new { message = "Email already registered." });
             }
+
+            if (await _customerRepository.AccountNumberExistsAsync(dto.AccountNumber))
+            {
+                return Conflict(new { message = "Account number already registered." });
+            }
+
+            var customer = new Customer
+            {
+                FullName = dto.FullName,
+                AccountNumber = dto.AccountNumber,
+                Email = dto.Email,
+                PasswordHash = BCrypt.Net.BCrypt.HashPassword(dto.Password),
+                CreatedAt = DateTime.UtcNow,
+            };
+
+            await _customerRepository.CreateAsync(customer);
+
+            return Ok(new { message = "Registration successful." });
         }
     }
 }
