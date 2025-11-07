@@ -25,7 +25,7 @@ commands:
             sonar-scanner \
               -Dsonar.projectKey="<< parameters.project_key >>" \
               -Dsonar.host.url="${SONAR_HOST_URL:-https://sonarcloud.io}" \
-              -Dsonar.login="${SONAR_TOKEN}" \
+              -Dsonar.token="${SONAR_TOKEN}" \
               -Dsonar.organization="st10300512" \
               -Dsonar.qualitygate.wait=true
 
