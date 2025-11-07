@@ -4,6 +4,7 @@ import Register from "./components/Register";
 import Login from "./components/Login";
 import CustomerDashboard from "./components/CustomerDashboard";
 import EmployeeDashboard from "./components/EmployeeDashboard";
+import RoleSelect from "./components/RoleSelect";
 
 export default function App() {
   return (
@@ -19,10 +20,11 @@ export default function App() {
       <div style={styles.container}>
         <Routes>
           <Route path="/" element={<Navigate to="/login" />} />
-          <Route path="/register" element={<Register />} />
+          {/* <Route path="/register" element={<Register />} /> */}
           <Route path="/login" element={<Login />} />
           <Route path="/customer" element={<CustomerDashboard />} />
           <Route path="/employee" element={<EmployeeDashboard />} />
+          <Route path="/role-select" element={<RoleSelect />} />
         </Routes>
       </div>
     </Router>
