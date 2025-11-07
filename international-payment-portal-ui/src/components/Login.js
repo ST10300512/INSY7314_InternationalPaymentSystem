@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { loginUser } from "../api";
+import { validateInput } from "../validation";
 
 export default function Login() {
   const [form, setForm] = useState({ accountNumber: "", password: "" });
@@ -9,8 +10,7 @@ export default function Login() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const accountPattern = /^\d{8,12}$/;
-    if (!accountPattern.test(form.accountNumber)) {
+    if (!validateInput(form.accountNumber, "accountPattern")) {
       alert("Invalid account number format.");
       return;
     }

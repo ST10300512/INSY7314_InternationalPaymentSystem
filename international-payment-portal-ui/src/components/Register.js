@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import { registerUser } from "../api";
+import { validateInput } from "../validation";
 
 export default function Register() {
   const [form, setForm] = useState({
@@ -16,24 +17,19 @@ export default function Register() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const namePattern = /^[A-Za-z\s]+$/;
-    const idPattern = /^\d{13}$/; // SA ID
-    const accountPattern = /^\d{8,12}$/;
-    const passwordPattern = /^(?=.*[A-Z])(?=.*\d)(?=.*[@$!%*?&]).{8,}$/;
-
-    if (!namePattern.test(form.fullName)) {
+    if (!validateInput(form.fullName, "namePattern")) {
       alert("Full name must only contain letters and spaces.");
       return;
     }
-    if (!idPattern.test(form.idNumber)) {
+    if (!validateInput(form.idNumber, "idPattern")) {
       alert("ID number must be 13 digits.");
       return;
     }
-    if (!accountPattern.test(form.accountNumber)) {
+    if (!validateInput(form.accountNumber, "accountPattern")) {
       alert("Account number must be 8–12 digits.");
       return;
     }
-    if (!passwordPattern.test(form.password)) {
+    if (!validateInput(form.password, "passwordPattern")) {
       alert("Password must be 8+ chars, 1 uppercase, 1 number, 1 special character.");
       return;
     }
