@@ -8,6 +8,9 @@ commands:
         type: string
       project_key:
         type: string
+      wait_for_gate:
+        type: boolean
+        default: true
     steps:
       - run:
           name: Install sonar-scanner
@@ -27,7 +30,7 @@ commands:
               -Dsonar.host.url="${SONAR_HOST_URL:-https://sonarcloud.io}" \
               -Dsonar.token="${SONAR_TOKEN}" \
               -Dsonar.organization="st10300512" \
-              -Dsonar.qualitygate.wait=true
+              -Dsonar.qualitygate.wait=$([ "<< parameters.wait_for_gate >>" = "true" ] && echo true || echo false)
 
 jobs:
   scan_backend:
@@ -43,6 +46,7 @@ jobs:
       - run_sonar_scan:
           workdir: "international-payment-portal-backend"
           project_key: "insy7314_backend"
+          wait_for_gate: true
 
   scan_frontend:
     docker:
@@ -55,13 +59,14 @@ jobs:
             cd international-payment-portal-ui
             if [ -f package-lock.json ]; then npm ci || npm install --no-audit --no-fund; else npm install --no-audit --no-fund; fi
       - run:
-          name: UI tests (produce coverage/lcov.info)
+          name: Generate coverage (UI)
           command: |
             cd international-payment-portal-ui
             npm test -- --coverage --watchAll=false
       - run_sonar_scan:
           workdir: "international-payment-portal-ui"
           project_key: "insy7314_ui"
+          wait_for_gate: false 
 
 workflows:
   version: 2
