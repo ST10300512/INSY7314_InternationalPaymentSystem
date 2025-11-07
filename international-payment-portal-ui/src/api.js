@@ -22,6 +22,8 @@ api.interceptors.request.use(
   (error) => Promise.reject(error)
 );
 
+
+
 // ---------- AUTH ROUTES ----------
 export const registerUser = (data) => api.post("/auth/register", data);
 export const loginUser = (data) => api.post("/auth/login", data);
