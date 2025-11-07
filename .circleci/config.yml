@@ -54,6 +54,11 @@ jobs:
           command: |
             cd international-payment-portal-ui
             if [ -f package-lock.json ]; then npm ci || npm install --no-audit --no-fund; else npm install --no-audit --no-fund; fi
+      - run:
+          name: UI tests (produce coverage/lcov.info)
+          command: |
+            cd international-payment-portal-ui
+            npm test -- --coverage --watchAll=false
       - run_sonar_scan:
           workdir: "international-payment-portal-ui"
           project_key: "insy7314_ui"
