@@ -1,7 +1,9 @@
 import React, { useState } from "react";
 import { submitPayment } from "../api";
+import { validateInput } from "../validation";
 
 export default function CustomerDashboard() {
+  
   const [form, setForm] = useState({
     amount: "",
     currency: "ZAR",
@@ -18,19 +20,15 @@ export default function CustomerDashboard() {
   const handleSubmit = async (e) => {
     e.preventDefault();
 
-    const amountPattern = /^[0-9]+(\.[0-9]{1,2})?$/;
-    const swiftPattern = /^[A-Z]{6}[A-Z0-9]{2,5}$/;
-    const accountPattern = /^\d{8,12}$/;
-
-    if (!amountPattern.test(form.amount)) {
+    if (!validateInput(form.amount, "amountPattern")) {
       alert("Amount must be a valid number.");
       return;
     }
-    if (!accountPattern.test(form.payeeAccount)) {
+    if (!validateInput(form.payeeAccount, "accountPattern")) {
       alert("Invalid payee account number.");
       return;
     }
-    if (!swiftPattern.test(form.swiftCode)) {
+    if (!validateInput(form.swiftCode, "swiftPattern")) {
       alert("Invalid SWIFT code format.");
       return;
     }
