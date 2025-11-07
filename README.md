@@ -12,7 +12,8 @@
 
 **Module:** Information Systems 3D - INSY7314 
 
-**YouTube Link:** - https://youtu.be/zxNPD-4D4BU
+**YouTube Links:** Part 2- https://youtu.be/zxNPD-4D4BU
+                   Part 3- 
 
 ## Overview
 
@@ -30,5 +31,20 @@
    - Connects to the backend API to display and submit transactions.  
    - Built with React Router and Tailwind CSS for a sleek design.
 
+## Sample Data
+**Test Customers**:
+
+Account: 1234567890 | John Doe
+Account: 2345678901 | Jane Smith
+Account: 3456789012 | Mike Johnson
+
+**Test Employees**:
+
+Account: 9876543210 | Sarah Williams
+Account: 8765432109 | David Brown
+
+**Password for all accounts**: 
+
+Password123!
 
 
