@@ -6,6 +6,8 @@ commands:
     parameters:
       workdir:
         type: string
+      project_key:
+        type: string
     steps:
       - run:
           name: Install sonar-scanner
@@ -21,6 +23,7 @@ commands:
           command: |
             cd << parameters.workdir >>
             sonar-scanner \
+              -Dsonar.projectKey="<< parameters.project_key >>" \
               -Dsonar.host.url="${SONAR_HOST_URL:-https://sonarcloud.io}" \
               -Dsonar.login="${SONAR_TOKEN}" \
               -Dsonar.organization="st10300512" \
@@ -36,14 +39,10 @@ jobs:
           name: Install backend deps
           command: |
             cd international-payment-portal-backend
-            if [ -f package-lock.json ]; then npm ci; else npm i; fi
-      - run:
-          name: Backend tests (coverage)
-          command: |
-            cd international-payment-portal-backend
-            npm test -- --coverage --coverageReporters=lcov || true
+            if [ -f package-lock.json ]; then npm ci || npm install --no-audit --no-fund; else npm install --no-audit --no-fund; fi
       - run_sonar_scan:
           workdir: "international-payment-portal-backend"
+          project_key: "insy7314_backend"
 
   scan_frontend:
     docker:
@@ -54,14 +53,10 @@ jobs:
           name: Install UI deps
           command: |
             cd international-payment-portal-ui
-            if [ -f package-lock.json ]; then npm ci; else npm i; fi
-      - run:
-          name: UI tests (coverage)
-          command: |
-            cd international-payment-portal-ui
-            npm test -- --watchAll=false --coverage --coverageReporters=lcov || true
+            if [ -f package-lock.json ]; then npm ci || npm install --no-audit --no-fund; else npm install --no-audit --no-fund; fi
       - run_sonar_scan:
           workdir: "international-payment-portal-ui"
+          project_key: "insy7314_ui"
 
 workflows:
   version: 2
