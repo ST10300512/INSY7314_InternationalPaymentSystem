@@ -1,6 +1,6 @@
 # International Payment System
 
-## POE PART 2
+## POE PART 3
 
 ### Group Members 
 
