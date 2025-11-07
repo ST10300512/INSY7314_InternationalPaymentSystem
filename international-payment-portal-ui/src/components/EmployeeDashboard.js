@@ -1,5 +1,4 @@
-//FOR LATER USE - Employee Dashboard to verify and submit payments to SWIFT
-
+// FOR LATER USE - Employee Dashboard to verify and submit payments to SWIFT
 import React, { useEffect, useState } from "react";
 import api from "../api";
 
@@ -49,75 +48,89 @@ export default function EmployeeDashboard() {
   }
 
   return (
-    <div style={styles.container}>
-      <h2 style={styles.title}>Employee Dashboard</h2>
+    <div style={sx.wrap}>
+      <div style={sx.header}>
+        <h2 style={sx.h}>Employee Dashboard</h2>
+        <p style={sx.sub}>Review, verify and submit pending customer payments.</p>
+      </div>
 
-      {loading ? (
-        <p>Loading pending payments...</p>
-      ) : pending.length === 0 ? (
-        <p>No pending payments to verify.</p>
-      ) : (
-        <table style={styles.table}>
-          <thead>
-            <tr>
-              <th>ID</th>
-              <th>Amount</th>
-              <th>Currency</th>
-              <th>Payee Account</th>
-              <th>SWIFT Code</th>
-              <th>Actions</th>
-            </tr>
-          </thead>
-          <tbody>
-            {pending.map((p) => (
-              <tr key={p.id}>
-                <td>{p.id}</td>
-                <td>{p.amount}</td>
-                <td>{p.currency}</td>
-                <td>{p.payeeAccount}</td>
-                <td>{p.swiftCode}</td>
-                <td>
-                  <button style={styles.verifyBtn} onClick={() => verify(p.id)}>Verify</button>
-                  <button style={styles.submitBtn} onClick={() => submit(p.id)}>Submit</button>
-                </td>
-              </tr>
-            ))}
-          </tbody>
-        </table>
-      )}
+      <div style={sx.card}>
+        {loading ? (
+          <p style={{ margin: 0 }}>Loading pending payments...</p>
+        ) : pending.length === 0 ? (
+          <p style={{ margin: 0 }}>No pending payments to verify.</p>
+        ) : (
+          <div style={{ overflowX: "auto" }}>
+            <table style={sx.table}>
+              <thead>
+                <tr>
+                  <th>ID</th>
+                  <th>Amount</th>
+                  <th>Currency</th>
+                  <th>Payee Account</th>
+                  <th>SWIFT Code</th>
+                  <th>Actions</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pending.map((p) => (
+                  <tr key={p.id}>
+                    <td><code>{p.id}</code></td>
+                    <td>{p.amount}</td>
+                    <td><span style={sx.badge}>{p.currency}</span></td>
+                    <td>{p.payeeAccount}</td>
+                    <td>{p.swiftCode}</td>
+                    <td>
+                      <button style={{ ...sx.btn, ...sx.verify }} onClick={() => verify(p.id)}>
+                        Verify
+                      </button>
+                      <button style={{ ...sx.btn, ...sx.submit }} onClick={() => submit(p.id)}>
+                        Submit
+                      </button>
+                    </td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+        )}
+      </div>
     </div>
   );
 }
 
-// Styles
-const styles = {
-  container: {
-    padding: "20px",
-    maxWidth: "900px",
-    margin: "0 auto",
-  },
-  title: {
-    textAlign: "center",
-    marginBottom: "20px",
-    color: "#0b3954",
+const sx = {
+  wrap: { maxWidth: 1000, margin: "0 auto", padding: 24 },
+  header: { marginBottom: 12 },
+  h: { margin: 0, color: "#0b3954", fontSize: "1.6rem" },
+  sub: { margin: "6px 0 0", color: "#4b5563" },
+  card: {
+    background: "#fff",
+    border: "1px solid #e5e7eb",
+    borderRadius: 16,
+    padding: 16,
+    boxShadow: "0 8px 24px rgba(0,0,0,.06)",
   },
   table: {
     width: "100%",
-    borderCollapse: "collapse",
+    borderCollapse: "separate",
+    borderSpacing: 0,
   },
-  verifyBtn: {
-    backgroundColor: "#007bff",
-    color: "#fff",
-    padding: "5px 10px",
-    marginRight: "8px",
+  badge: {
+    display: "inline-block",
+    padding: "2px 8px",
+    borderRadius: 999,
+    background: "#e8f0fe",
+    fontSize: 12,
+  },
+  btn: {
+    padding: "8px 12px",
     border: "none",
+    borderRadius: 10,
     cursor: "pointer",
+    fontWeight: 700,
+    marginRight: 8,
   },
-  submitBtn: {
-    backgroundColor: "#28a745",
-    color: "#fff",
-    padding: "5px 10px",
-    border: "none",
-    cursor: "pointer",
-  },
+  verify: { background: "#0ea5e9", color: "#fff" },
+  submit: { background: "#22c55e", color: "#fff" },
 };
