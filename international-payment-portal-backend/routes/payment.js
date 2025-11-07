@@ -36,10 +36,50 @@ router.post("/submit", verifyToken, async (req, res) => {
   }
 });
 
-// Get Payments (for employee)(Not yet implemented for user)
+// Get All Payments (for employee)
 router.get("/", verifyToken, async (req, res) => {
   const payments = await Payment.find();
   res.json(payments);
+});
+
+// Get Pending Payments (for employee)
+router.get("/pending", verifyToken, async (req, res) => {
+  try {
+    const payments = await Payment.find({ status: "Submitted" });
+    res.json(payments);
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Verify Payment (for employee)
+router.post("/verify/:id", verifyToken, async (req, res) => {
+  try {
+    const payment = await Payment.findByIdAndUpdate(
+      req.params.id,
+      { status: "Verified" },
+      { new: true }
+    );
+    if (!payment) return res.status(404).json({ message: "Payment not found" });
+    res.json({ message: "Payment verified", payment });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
+});
+
+// Submit Payment to SWIFT (for employee)
+router.post("/submit/:id", verifyToken, async (req, res) => {
+  try {
+    const payment = await Payment.findByIdAndUpdate(
+      req.params.id,
+      { status: "Submitted to SWIFT" },
+      { new: true }
+    );
+    if (!payment) return res.status(404).json({ message: "Payment not found" });
+    res.json({ message: "Payment submitted to SWIFT", payment });
+  } catch (err) {
+    res.status(500).json({ error: err.message });
+  }
 });
 
 export default router;
